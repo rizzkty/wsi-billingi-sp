@@ -9,8 +9,11 @@ $db = getDB();
 $query_teknisi = "SELECT COUNT(*) FROM users WHERE role='teknisi' AND aktif=1";
 $query_admin   = "SELECT COUNT(*) FROM users WHERE role='admin' AND aktif=1";
 
-$total_teknisi = $db->query($query_teknisi)->fetch_row()[0];
-$total_admin   = $db->query($query_admin)->fetch_row()[0];
+$result_teknisi = $db->query($query_teknisi);
+$result_admin   = $db->query($query_admin);
+
+$total_teknisi = $result_teknisi ? $result_teknisi->fetch_row()[0] : 0;
+$total_admin   = $result_admin ? $result_admin->fetch_row()[0] : 0;
 ?>
 <!DOCTYPE html>
 <html lang="id">
