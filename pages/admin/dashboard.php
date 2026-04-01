@@ -6,8 +6,11 @@ cekRole(['pemilik', 'admin']);
 $db = getDB();
 
 // Statistik singkat
-$total_teknisi = $db->query("SELECT COUNT(*) FROM users WHERE role='teknisi' AND aktif=1")->fetch_row()[0];
-$total_admin   = $db->query("SELECT COUNT(*) FROM users WHERE role='admin' AND aktif=1")->fetch_row()[0];
+$query_teknisi = "SELECT COUNT(*) FROM users WHERE role='teknisi' AND aktif=1";
+$query_admin   = "SELECT COUNT(*) FROM users WHERE role='admin' AND aktif=1";
+
+$total_teknisi = $db->query($query_teknisi)->fetch_row()[0];
+$total_admin   = $db->query($query_admin)->fetch_row()[0];
 ?>
 <!DOCTYPE html>
 <html lang="id">
