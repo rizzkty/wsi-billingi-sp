@@ -1,5 +1,5 @@
 <?php
-// pages/teknisi/dashboard.php
+
 require_once __DIR__ . '/../../includes/auth.php';
 cekRole(['pemilik', 'admin', 'teknisi']);
 ?>

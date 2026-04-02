@@ -1,5 +1,5 @@
 <?php
-// pages/pemilik/dashboard.php
+
 require_once __DIR__ . '/../../includes/auth.php';
 cekRole(['pemilik']);
 
@@ -7,7 +7,7 @@ $db      = getDB();
 $msg_ok  = '';
 $msg_err = '';
 
-// ─── Proses tambah user ───────────────────────────────────────────────────────
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'tambah_user') {
     csrf_verify();
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'tambah_
     }
 }
 
-// ─── Proses toggle aktif/nonaktif ─────────────────────────────────────────────
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'toggle_aktif') {
     csrf_verify();
     $uid   = (int)($_POST['uid'] ?? 0);
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'toggle_
     $msg_ok = 'Status user diperbarui.';
 }
 
-// ─── Ambil daftar user ────────────────────────────────────────────────────────
+
 $users = $db->query(
     "SELECT u.id, u.nama, u.username, u.role, u.aktif, u.created_at,
             p.nama AS dibuat_oleh_nama

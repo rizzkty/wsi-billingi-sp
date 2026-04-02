@@ -1,8 +1,8 @@
 <?php
-// login.php
+
 require_once __DIR__ . '/includes/auth.php';
 
-// Sudah login? langsung redirect
+
 if (!empty($_SESSION['user_id'])) {
     redirectDashboard();
 }

@@ -1,11 +1,11 @@
 <?php
-// pages/admin/dashboard.php
+
 require_once __DIR__ . '/../../includes/auth.php';
 cekRole(['pemilik', 'admin']);
 
 $db = getDB();
 
-// Statistik singkat
+
 $query_teknisi = "SELECT COUNT(*) FROM users WHERE role='teknisi' AND aktif=1";
 $query_admin   = "SELECT COUNT(*) FROM users WHERE role='admin' AND aktif=1";
 
