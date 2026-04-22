@@ -1,75 +1,53 @@
 <?php
-
+// pages/teknisi/dashboard.php
 require_once __DIR__ . '/../../includes/auth.php';
 cekRole(['pemilik', 'admin', 'teknisi']);
+
+$db = getDB();
+
+// ─── Statistik ────────────────────────────────────────────────────────────────
+$total_pelanggan = $db->query("SELECT COUNT(*) FROM pelanggan WHERE status='aktif'")->fetch_row()[0] ?? 0;
+$total_isolir    = $db->query("SELECT COUNT(*) FROM pelanggan WHERE status='isolir'")->fetch_row()[0] ?? 0;
+$total_nonaktif  = $db->query("SELECT COUNT(*) FROM pelanggan WHERE status='nonaktif'")->fetch_row()[0] ?? 0;
+
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard Teknisi — Billing ISP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root { --bg: #0b0f1a; --surface: #111827; --border: rgba(255,255,255,.08);
-                --accent: #3b82f6; --accent2: #06b6d4; --text: #f1f5f9; --muted: #94a3b8; }
-        body { background: var(--bg); color: var(--text); font-family: 'Sora', sans-serif; min-height: 100vh; }
-        nav {
-            background: var(--surface); border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
-        }
-        .nav-brand { font-weight: 700; }
-        .nav-brand span { background: linear-gradient(135deg, var(--accent), var(--accent2));
-                          -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-role { font-family: 'JetBrains Mono', monospace; font-size: .72rem;
-                    background: rgba(6,182,212,.15); border: 1px solid rgba(6,182,212,.3);
-                    color: var(--accent2); padding: .25rem .75rem; border-radius: 20px; }
-        .btn-logout { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3);
-                      color: #fca5a5; padding: .4rem 1rem; border-radius: 8px;
-                      font-family: 'Sora', sans-serif; cursor: pointer; }
-        main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
-        h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: .25rem; }
-        .sub { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; }
-        .info-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem;
-        }
-        .info-card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
-        .perm-list { list-style: none; }
-        .perm-list li { padding: .5rem 0; border-bottom: 1px solid var(--border); font-size: .9rem;
-                        display: flex; align-items: center; gap: .5rem; }
-        .perm-list li:last-child { border-bottom: none; }
-        .ok { color: #86efac; } .no { color: #fca5a5; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Teknisi — Billing ISP</title>
+<link rel="stylesheet" href="/billing-isp/includes/sidebar.css">
 </head>
 <body>
-<nav>
-    <div class="nav-brand">🌐 <span>Billing ISP</span></div>
-    <div style="display:flex;align-items:center;gap:1rem">
-        <span class="nav-role">🔧 <?= htmlspecialchars($_SESSION['nama']) ?></span>
-        <form method="POST" action="/billing-isp/logout.php">
-            <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-            <button class="btn-logout">Keluar</button>
-        </form>
-    </div>
-</nav>
+<?php require_once __DIR__ . '/../../includes/sidebar.php'; ?>
+<div class="main-content">
 
-<main>
-    <h1>Dashboard Teknisi</h1>
-    <p class="sub">Selamat datang, <?= htmlspecialchars($_SESSION['nama']) ?></p>
+    <div class="page-title">Dashboard Teknisi</div>
+    <div class="page-sub">Selamat datang, <?= htmlspecialchars($_SESSION['nama']) ?></div>
 
-    <div class="info-card">
-        <h2>Hak Akses Kamu sebagai Teknisi</h2>
-        <ul class="perm-list">
-            <li><span class="ok">✓</span> Lihat daftar pelanggan</li>
-            <li><span class="ok">✓</span> Kelola perangkat jaringan (ODP, ONU, dll)</li>
-            <li><span class="ok">✓</span> Catat gangguan & tiket support</li>
-            <li><span class="ok">✓</span> Update status koneksi pelanggan</li>
-            <li><span class="no">✗</span> Kelola pembayaran & tagihan</li>
-            <li><span class="no">✗</span> Lihat laporan keuangan</li>
-            <li><span class="no">✗</span> Membuat / menghapus akun user</li>
-        </ul>
+    <!-- Statistik -->
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="sc-label">Pelanggan Aktif</div>
+            <div class="sc-val"><?= $total_pelanggan ?></div>
+            <div class="sc-sub">terhubung ke jaringan</div>
+        </div>
+        <div class="stat-card">
+            <div class="sc-label">Diisolir</div>
+            <div class="sc-val"><?= $total_isolir ?></div>
+            <div class="sc-sub">perlu penanganan</div>
+        </div>
+        <div class="stat-card">
+            <div class="sc-label">Nonaktif</div>
+            <div class="sc-val"><?= $total_nonaktif ?></div>
+            <div class="sc-sub">tidak aktif</div>
+        </div>
     </div>
-</main>
+
+
+
+</div>
 </body>
 </html>
